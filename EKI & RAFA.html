@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>You're Invited! - Eki & Rafa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="site-wrapper">
+      <hr class="divider" />
+      <header class="hero">
+        <h1>Eki & Rafa</h1>
+        <p class="tagline">Joyfully invite you to celebrate our wedding day</p>
+        <p class="date">Sunday, 1 June 2025</p>
+      </header>
+
+      <main>
+        <section class="video-section">
+          <h2>Our Story</h2>
+          <div class="video-wrapper">
+            <video controls preload="metadata" poster="videos/video-poster.jpg">
+              <source src="videos/eki-rafa.mp4" type="video/mp4" />
+              Sorry, your browser doesn't support embedded videos.
+            </video>
+          </div>
+          <p>A little glimpse into our journey together.</p>
+        </section>
+
+        <section class="details-section">
+          <h2>The Celebration Details</h2>
+          <div class="details-grid">
+            <div class="detail-item">
+              <h3>Akad</h3>
+              <p>08.00 - 09.30</p>
+            </div>
+            <div class="detail-item">
+              <h3>Resepsi</h3>
+              <p>11.00 - 13.00</p>
+            </div>
+            <div class="detail-item">
+              <h3>Location</h3>
+              <p>Braja Mustika Hotel & Convention Center Bogor</p>
+              <a href="[Google Maps Link]" target="_blank" class="button-link"
+                >View Map</a
+              >
+            </div>
+            <div class="detail-item">
+              <h3>Dress Code</h3>
+              <p>[e.g., Formal, Smart Casual, Traditional]</p>
+            </div>
+          </div>
+          <p class="note">
+            Your presence is the only gift we need, but if you wish to honor us
+            with a gift, a contribution towards our future would be gratefully
+            received.
+          </p>
+        </section>
+
+        <section class="rsvp-section">
+          <h2>RSVP</h2>
+          <p class="rsvp-intro">
+            Please let us know if you can make it by 1 June 2025.
+          </p>
+          <form class="rsvp-form" id="rsvpForm">
+            <div class="form-group">
+              <label for="name">Your Full Name:</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Your Email:</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label>Will you be attending?</label>
+              <div class="radio-group">
+                <input
+                  type="radio"
+                  id="attending-yes"
+                  name="attendance"
+                  value="yes"
+                  required
+                />
+                <label for="attending-yes">Joyfully Attending</label>
+              </div>
+              <div class="radio-group">
+                <input
+                  type="radio"
+                  id="attending-no"
+                  name="attendance"
+                  value="no"
+                />
+                <label for="attending-no">Regrettably Declining</label>
+              </div>
+            </div>
+            <div class="form-group" id="guest-count-group">
+              <label for="guests">Number of Guests (including yourself):</label>
+              <input
+                type="number"
+                id="guests"
+                name="guests"
+                min="1"
+                max="10"
+                value="1"
+                required
+              />
+              <small
+                >Please indicate the total number of people in your
+                party.</small
+              >
+            </div>
+            <div class="form-group">
+              <label for="message"
+                >Your Message / Dietary Restrictions (Optional):</label
+              >
+              <textarea id="message" name="message" rows="5"></textarea>
+            </div>
+            <button type="submit" class="button-primary">Send RSVP</button>
+          </form>
+        </section>
+      </main>
+
+      <footer>
+        <p>&copy; 2025 Eki & Rafa. All Rights Reserved.</p>
+        <p>Thank you for being a part of our special day!</p>
+      </footer>
+
+      <script>
+        // JavaScript for form interactivity and submission
+        document.addEventListener("DOMContentLoaded", function () {
+          // Logic to show/hide guest count based on attendance selection
+          const attendingYes = document.getElementById("attending-yes");
+          const attendingNo = document.getElementById("attending-no");
+          const guestCountGroup = document.getElementById("guest-count-group");
+          const guestsInput = document.getElementById("guests");
+
+          function toggleGuestCount() {
+            if (attendingYes.checked) {
+              guestCountGroup.style.display = "block"; // Make visible
+              guestsInput.setAttribute("required", "required"); // Make required
+            } else {
+              guestCountGroup.style.display = "none"; // Hide
+              guestsInput.removeAttribute("required"); // No longer required
+              guestsInput.value = "1"; // Reset count if declining
+            }
+          }
+
+          attendingYes.addEventListener("change", toggleGuestCount);
+          attendingNo.addEventListener("change", toggleGuestCount);
+          toggleGuestCount(); // Initial check on page load
+
+          // --- Form Submission Logic ---
+          const rsvpForm = document.getElementById("rsvpForm");
+          const submitButton = rsvpForm.querySelector('button[type="submit"]');
+
+          rsvpForm.addEventListener("submit", async function (event) {
+            event.preventDefault(); // Stop the form from submitting normally
+
+            submitButton.disabled = true; // Disable button to prevent multiple clicks
+            submitButton.textContent = "Sending..."; // Change text to indicate loading
+
+            // Gather form data into a JavaScript object
+            const formData = new FormData(rsvpForm);
+            const data = {
+              name: formData.get("name"),
+              email: formData.get("email"),
+              attendance: formData.get("attendance"),
+              guests:
+                formData.get("attendance") === "yes"
+                  ? parseInt(formData.get("guests"), 10)
+                  : null,
+              message: formData.get("message"),
+            };
+
+            try {
+              // Send data to the backend using Fetch API
+              const response = await fetch(
+                "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE_OR_JAVA_API",
+                {
+                  method: "POST", // It's a POST request to send data
+                  headers: {
+                    "Content-Type": "application/json", // Telling the server we're sending JSON
+                  },
+                  body: JSON.stringify(data), // Convert JavaScript object to JSON string
+                }
+              );
+
+              if (response.ok) {
+                // Check if the response was successful (HTTP status 200-299)
+                alert("Thank you! Your RSVP has been submitted.");
+                rsvpForm.reset(); // Clear all form fields
+                toggleGuestCount(); // Reset guest count visibility after clearing
+              } else {
+                const errorText = await response.text(); // Get error message from server
+                alert(
+                  "Failed to submit RSVP. Please try again. Error: " + errorText
+                );
+                console.error("Server error:", response.status, errorText); // Log error for debugging
+              }
+            } catch (error) {
+              // Catch network errors (e.g., server offline)
+              alert(
+                "Network error or server unreachable. Please check your connection and try again."
+              );
+              console.error("Fetch error:", error);
+            } finally {
+              submitButton.disabled = false; // Re-enable the button
+              submitButton.textContent = "Send RSVP"; // Reset button text
+            }
+          });
+        });
+      </script>
+    </div>
+  </body>
+</html>
